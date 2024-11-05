@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converter Link</title>
+    <style>
+        /* Definir a imagem de fundo */
+        body {
+            background-image: url('https://unisinos.br/biblioteca/images/banner/biblioteca-unisinos.jpg');
+            background-size: cover; /* Faz com que a imagem cubra toda a tela */
+            background-position: center center; /* Centraliza a imagem */
+            background-attachment: fixed; /* Faz com que a imagem fique fixa enquanto a página rola */
+            font-family: Arial, sans-serif; /* Define uma fonte padrão para o texto */
+            padding: 20px; /* Adiciona um pouco de espaçamento ao redor da página */
+            height: 100vh; /* Garante que o corpo ocupe 100% da altura da tela */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para o contêiner de entrada e resultado */
+        .caixa-conteudo {
+            background-color: rgba(255, 255, 255, 0.8); /* Fundo branco com leve transparência */
+            padding: 40px; /* Aumenta o padding interno, criando mais espaço na caixa */
+            border-radius: 8px; /* Bordas arredondadas */
+            max-width: 800px; /* Aumenta a largura máxima */
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+        }
+
+        /* Estilos para o título h2 (texto "Gerar novo link") */
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 0;
+            color: black; /* Cor do título para preto */
+        }
+
+        /* Estilos para o rótulo (label) "Insira a URL antiga:" */
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            color: black; /* Cor do texto do label para preto */
+        }
+
+        /* Estilo para o campo de texto */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Estilos para o botão */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo para o parágrafo de resultado */
+        p {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+            color: black; /* Cor do texto do resultado para preto */
+        }
+
+        /* Estilos para o botão "Limpar" */
+        #limparBtn {
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script>
+        // Função para limpar a caixa de texto quando a página é carregada
+        window.onload = function() {
+            document.getElementById("urlOriginal").value = "";  // Limpa o conteúdo da caixa de texto
+            document.getElementById("resultado").innerHTML = "";  // Limpa o resultado exibido
+        }
+
+        function gerarNovoLink() {
+            // Pega o valor inserido no campo de texto
+            var urlOriginal = document.getElementById("urlOriginal").value;
+
+            // Verifica se o campo está vazio
+            if (urlOriginal === "") {
+                document.getElementById("resultado").innerHTML = "Por favor, insira uma URL válida.";
+                return;
+            }
+
+            // Procura o valor após "cod_acervo_acessibilidade="
+            var regex = /cod_acervo_acessibilidade=(\d+)/;
+            var resultado = urlOriginal.match(regex);
+
+            // Se encontrou o valor esperado, gera o novo link
+            if (resultado) {
+                var codAcervo = resultado[1];  // Captura o número que está após o sinal "="
+                var novoLink = "https://www.biblioteca.asav.org.br/?q=" + codAcervo + "&for=INDICE_30";
+
+                // Cria o hiperlink clicável e exibe
+                document.getElementById("resultado").innerHTML = 'Novo link gerado: <a href="' + novoLink + '" target="_blank">' + novoLink + '</a>';
+                document.getElementById("limparBtn").style.display = "inline"; // Mostra o botão "Limpar"
+            } else {
+                document.getElementById("resultado").innerHTML = "URL inválida. Não foi possível encontrar o código de acervo.";
+                document.getElementById("limparBtn").style.display = "none"; // Esconde o botão "Limpar"
+            }
+        }
+
+        function limparCampos() {
+            // Limpa a caixa de texto e o resultado gerado
+            document.getElementById("urlOriginal").value = "";
+            document.getElementById("resultado").innerHTML = "";
+            document.getElementById("limparBtn").style.display = "none"; // Esconde o botão "Limpar" após limpar
+        }
+    </script>
+</head>
+<body>
+
+    <div class="caixa-conteudo">
+        <h2>Gerar novo link de acesso aos ebooks</h2>
+
+        <label for="urlOriginal">Insira a URL antiga:</label>
+        <input type="text" id="urlOriginal" size="100" placeholder="Cole a URL aqui...">
+        <button onclick="gerarNovoLink()">Gerar Novo Link</button>
+
+        <p id="resultado"></p>
+
+        <!-- Botão "Limpar" aparece após o resultado -->
+        <button id="limparBtn" onclick="limparCampos()" style="display:none;">Limpar</button>
+    </div>
+
+</body>
+</html>
